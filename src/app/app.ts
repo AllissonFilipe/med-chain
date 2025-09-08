@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { BlockchainService } from './services/blockchain';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     MatSelectModule,
     MatCardModule,
     CommonModule,
-    NgxFileDropModule
+    NgxFileDropModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
@@ -39,6 +41,7 @@ export class App implements OnInit {
   public files: NgxFileDropEntry[] = [];
   public selectedFile: File | null = null;
   private _snackBar = inject(MatSnackBar);
+  protected readonly isLoading = signal<boolean>(false);
 
   // Formulário de dados do paciente e tipo de documento
   protected readonly receiverForm = this.fb.group({
@@ -47,7 +50,8 @@ export class App implements OnInit {
 
   protected readonly docForm = this.fb.group({
     docName: ['', [Validators.required]],
-    docType: ['', [Validators.required]]
+    docType: ['', [Validators.required]],
+    description: ['', [Validators.required]]
   });
 
   // Signals para arquivo, preview, hash, CID, permissões, etc.
@@ -67,13 +71,6 @@ export class App implements OnInit {
   // Permissões simuladas
   protected readonly permissionsSummary = 'Hospital, Laboratório, Seguradora';
 
-  // Controle de envio
-  protected readonly canSend = computed(() =>
-    this.receiverForm.valid &&
-    !!this.file() &&
-    !!this.fileHash() &&
-    !!this.ipfsCid()
-  );
   balance: string = '0';
   protected readonly connectedAccount = signal<string | undefined>(undefined);
   constructor(private blockchainService: BlockchainService) { }
@@ -87,42 +84,6 @@ export class App implements OnInit {
 
   async connect(): Promise<void> {
     await this.blockchainService.connectWallet();
-  }
-
-  // Cálculo de hash SHA-256 do arquivo
-  private async calculateFileHash(file: File): Promise<string> {
-    const arrayBuffer = await file.arrayBuffer();
-    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
-  }
-
-  // Simulação de upload para IPFS (gera CID fake)
-  private async uploadToIpfs(file: File): Promise<string> {
-    // Simule um delay e retorne um CID fake
-    await new Promise(res => setTimeout(res, 800));
-    return 'bafybeigdyrzt' + Math.floor(Math.random() * 100000);
-  }
-
-  // Manipulação do arquivo selecionado
-  async onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length) {
-      const file = input.files[0];
-      this.file.set(file);
-      // Preview para imagens
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = () => this.filePreview.set(reader.result as string);
-        reader.readAsDataURL(file);
-      } else {
-        this.filePreview.set(null);
-      }
-      // Calcule hash e simule upload IPFS
-      this.fileHash.set(null);
-      this.ipfsCid.set(null);
-      this.fileHash.set(await this.calculateFileHash(file));
-      this.ipfsCid.set(await this.uploadToIpfs(file));
-    }
   }
 
   public dropped(files: NgxFileDropEntry[]) {
@@ -154,25 +115,24 @@ export class App implements OnInit {
     console.log('Arquivo saiu da área', event);
   }
 
-  public upload() {
-    if (this.selectedFile) {
-      console.log('Enviando arquivo:', this.selectedFile);
-      // aqui você faria a chamada HTTP para a sua API
-    }
-  }
-
   public loadContract() {
     this.blockchainService.loadContract(this.receiverForm.value.receiverAddress!);
   }
 
-  // Envio do token (simulado)
   async sendToken() {
-    await this.blockchainService.sendToken(this.receiverForm.value.receiverAddress!, this.docForm.value.docName!, 'ueifkjabhfeuwfhoiuewfiefufhiuewgf', parseInt(this.docForm.value.docType!)).then(() => {
+    this.isLoading.set(true)
+    const uploadedFile: any = await this.blockchainService.uploadPinata(this.selectedFile);
+    await this.blockchainService.sendToken(this.receiverForm.value.receiverAddress!, this.docForm?.value?.docName!, this.docForm?.value?.description!, uploadedFile?.cid, parseInt(this.docForm?.value?.docType!)).then(() => {
+      this.isLoading.set(false)
       this._snackBar.open('Documento registrado com sucesso na blockchain!', 'Fechar');
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     }).catch((error: any) => {
+      this.isLoading.set(false)
       console.error('Erro ao registrar documento:', error);
       this._snackBar.open('Erro ao registrar documento na blockchain.', 'Fechar');
     });
+
   }
 }

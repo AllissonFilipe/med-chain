@@ -1,32 +1,4 @@
-export const ABI_CONTRACT = [
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_receiverAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "_docName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_ipfsAddress",
-				"type": "string"
-			},
-			{
-				"internalType": "enum HatRepository.DocumentType",
-				"name": "_docType",
-				"type": "uint8"
-			}
-		],
-		"name": "registerDocument",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
+export const ABI_CONTRACT =[
 	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
@@ -48,8 +20,20 @@ export const ABI_CONTRACT = [
 				"type": "string"
 			},
 			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"indexed": false,
+				"internalType": "string",
+				"name": "ipfsAddress",
+				"type": "string"
+			},
+			{
 				"indexed": true,
-				"internalType": "enum HatRepository.DocumentType",
+				"internalType": "enum MedicalDocumentRepository.DocumentType",
 				"name": "docType",
 				"type": "uint8"
 			}
@@ -79,6 +63,11 @@ export const ABI_CONTRACT = [
 			},
 			{
 				"internalType": "string",
+				"name": "description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
 				"name": "ipfsAddress",
 				"type": "string"
 			},
@@ -88,7 +77,7 @@ export const ABI_CONTRACT = [
 				"type": "uint256"
 			},
 			{
-				"internalType": "enum HatRepository.DocumentType",
+				"internalType": "enum MedicalDocumentRepository.DocumentType",
 				"name": "docType",
 				"type": "uint8"
 			},
@@ -107,6 +96,25 @@ export const ABI_CONTRACT = [
 				"internalType": "address",
 				"name": "_receiverAddress",
 				"type": "address"
+			}
+		],
+		"name": "getAllDocumentTitles",
+		"outputs": [
+			{
+				"internalType": "string[]",
+				"name": "",
+				"type": "string[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_receiverAddress",
+				"type": "address"
 			},
 			{
 				"internalType": "string",
@@ -114,13 +122,18 @@ export const ABI_CONTRACT = [
 				"type": "string"
 			}
 		],
-		"name": "getBadgePorTitulo",
+		"name": "getDocumentByTitle",
 		"outputs": [
 			{
 				"components": [
 					{
 						"internalType": "string",
 						"name": "docName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
 						"type": "string"
 					},
 					{
@@ -134,7 +147,7 @@ export const ABI_CONTRACT = [
 						"type": "uint256"
 					},
 					{
-						"internalType": "enum HatRepository.DocumentType",
+						"internalType": "enum MedicalDocumentRepository.DocumentType",
 						"name": "docType",
 						"type": "uint8"
 					},
@@ -144,7 +157,7 @@ export const ABI_CONTRACT = [
 						"type": "bool"
 					}
 				],
-				"internalType": "struct HatRepository.Document",
+				"internalType": "struct MedicalDocumentRepository.Document",
 				"name": "",
 				"type": "tuple"
 			}
@@ -160,31 +173,12 @@ export const ABI_CONTRACT = [
 				"type": "address"
 			}
 		],
-		"name": "getContagemDeBadges",
+		"name": "getDocumentCount",
 		"outputs": [
 			{
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_receiverAddress",
-				"type": "address"
-			}
-		],
-		"name": "getTitulosDasBadgesDoUsuario",
-		"outputs": [
-			{
-				"internalType": "string[]",
-				"name": "",
-				"type": "string[]"
 			}
 		],
 		"stateMutability": "view",
@@ -201,6 +195,39 @@ export const ABI_CONTRACT = [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_receiverAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "_docName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_description",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_ipfsAddress",
+				"type": "string"
+			},
+			{
+				"internalType": "enum MedicalDocumentRepository.DocumentType",
+				"name": "_docType",
+				"type": "uint8"
+			}
+		],
+		"name": "registerDocument",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]

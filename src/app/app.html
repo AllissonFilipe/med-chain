@@ -1,3 +1,4 @@
+<img src="assets/medChain.png" alt="Logo" class="logo-img">
 <div class="app-container" class="div-mat-card ">
   <mat-card>
     <mat-card-header>
@@ -41,7 +42,11 @@
           <form [formGroup]="docForm" class="mt-mat-step">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Nome do Documento</mat-label>
-              <input matInput formControlName="docName" placeholder="Nome do Documentpo">
+              <input matInput formControlName="docName" placeholder="Nome do Documento">
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Descrição do Documento</mat-label>
+              <input matInput formControlName="description" placeholder="Descrição do Documento">
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>Tipo de Documento</mat-label>
@@ -69,7 +74,8 @@
             </mat-form-field>
             <div class="mt-16">
               <button mat-button matStepperPrevious>Voltar</button>
-              <button mat-raised-button color="primary" matStepperNext [disabled]="!receiverForm.valid" (click)="loadContract()">
+              <button mat-raised-button color="primary" matStepperNext [disabled]="!receiverForm.valid"
+                (click)="loadContract()">
                 Próximo
               </button>
             </div>
@@ -90,11 +96,6 @@
             </mat-list-item>
             <br>
             <mat-list-item>
-              <strong>CID/URI (IPFS):</strong>
-              <span class="ml-mat-list">ueifkjabhfeuwfhoiuewfiefufhiuewgf</span>
-            </mat-list-item>
-            <br>
-            <mat-list-item>
               <strong>Nome do Documento:</strong>
               <span class="ml-mat-list">{{ docForm.value.docName }}</span>
             </mat-list-item>
@@ -102,15 +103,15 @@
             <mat-list-item>
               <strong>Tpo de Documento:</strong>
               @if(docForm.value.docType == '0') {
-                <span class="ml-mat-list">Exame</span>
+              <span class="ml-mat-list">Exame</span>
               } @else if(docForm.value.docType == '1') {
-                <span class="ml-mat-list">Laudo</span>
+              <span class="ml-mat-list">Laudo</span>
               } @else if(docForm.value.docType == '2') {
-                <span class="ml-mat-list">Receita</span>
+              <span class="ml-mat-list">Receita</span>
               } @else {
-                <span class="ml-mat-list">Outro</span>
+              <span class="ml-mat-list">Outro</span>
               }
-              
+
             </mat-list-item>
             <br>
             <mat-list-item>
@@ -121,7 +122,7 @@
           </mat-list>
           <div class="mt-24">
             <button mat-button matStepperPrevious>Voltar</button>
-            <button mat-raised-button color="accent" (click)="sendToken()" [disabled]="!canSend">
+            <button mat-raised-button color="accent" (click)="sendToken()">
               Enviar Token
             </button>
           </div>
@@ -132,4 +133,7 @@
       Nenhum dado sensível é armazenado na blockchain. Apenas logs e permissões.
     </mat-card-footer>
   </mat-card>
+</div>
+<div class="loading-overlay" *ngIf="isLoading()">
+  <mat-spinner diameter="60"></mat-spinner>
 </div>

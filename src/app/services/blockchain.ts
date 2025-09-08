@@ -2,6 +2,12 @@ import { Injectable, NgZone } from '@angular/core';
 import { Subject } from 'rxjs';
 import Web3 from 'web3';
 import { ABI_CONTRACT } from '../contract-abi';
+import { PinataSDK } from "pinata";
+
+const pinata = new PinataSDK({
+  pinataJwt: "PINATA_JWT",
+  pinataGateway: "PINATA_GATEWAY",
+});
 
 declare global {
   interface Window {
@@ -50,7 +56,17 @@ export class BlockchainService {
     }
   }
 
-  async sendToken(receiverAddress: string, docName: string, ipfsAddress: string, docType: number): Promise<void> {
-    await this.contract.methods.registerDocument(receiverAddress, docName, ipfsAddress, docType).send({ from: this.accounts[0] });
+  async uploadPinata(file: any): Promise<any> {
+    try {
+      const filePinata = file;
+      const upload = await pinata.upload.public.file(filePinata);
+      return upload;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async sendToken(receiverAddress: string, docName: string, description: string, ipfsAddress: string, docType: number): Promise<void> {
+    await this.contract.methods.registerDocument(receiverAddress, docName, description, ipfsAddress, docType).send({ from: this.accounts[0] });
   }
 }

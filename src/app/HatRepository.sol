@@ -2,11 +2,11 @@
 pragma solidity ^0.8.30;
 
 /**
- * @title BadgeRepositoryMulti
- * @dev Contrato para que usuários possam receber múltiplas badges únicas por título.
- * Apenas o proprietário do contrato pode emitir novas badges.
+ * @title MedicalDocumentRepository
+ * @dev Contrato para que usuários possam receber múltiplos documentos médicos.
+ * Apenas o proprietário do contrato pode emitir novos documentos.
  */
-contract HatRepository {
+contract MedicalDocumentRepository {
 
     address public owner;
 
@@ -19,21 +19,24 @@ contract HatRepository {
 
     struct Document {
         string docName;
+        string description;
         string ipfsAddress;
         uint256 creationDate;
         DocumentType docType;
         bool emitida; // Flag para verificar existência de forma mais barata
     }
 
-    // Mapeamento aninhado: endereço do receiverAddress -> título da badge -> struct da Badge
+    // Mapeamento aninhado: endereço do paciente -> título do documento -> struct do Documento
     mapping(address => mapping(string => Document)) public documents;
 
-    // Mapeamento para armazenar a lista de títulos de badges de cada usuário
+    // Mapeamento para armazenar a lista de títulos de documentos de cada paciente
     mapping(address => string[]) private documentNames;
 
     event RegisteredDocument(
         address indexed receiverAddress,
         string docName,
+        string description,
+        string ipfsAddress,
         DocumentType indexed docType
     );
 
@@ -47,61 +50,63 @@ contract HatRepository {
     }
 
     /**
-     * @dev Registra uma nova badge para um usuário, desde que ele já não possua uma com o mesmo título.
-     * @param _receiverAddress O endereço que receberá a badge.
-     * @param _docName O título único da badge (usado como ID).
-     * @param _ipfsAddress Uma descrição detalhada da conquista.
-     * @param _docType O tipo de badge.
+     * @dev Registra um novo documento médico para um paciente, desde que ele já não possua um com o mesmo título.
+     * @param _receiverAddress O endereço do paciente que receberá o documento.
+     * @param _docName O título único do documento (usado como ID).
+     * @param _ipfsAddress Endereço IPFS onde o documento está armazenado.
+     * @param _docType O tipo de documento.
      */
     function registerDocument(
         address _receiverAddress,
         string memory _docName,
+        string memory _description,
         string memory _ipfsAddress,
         DocumentType _docType
     ) public onlyOwner {
-        require(!documents[_receiverAddress][_docName].emitida, "O usuario ja possui uma badge com este titulo.");
+        require(!documents[_receiverAddress][_docName].emitida, "O paciente ja possui um documento com este titulo.");
         require(bytes(_docName).length > 0, "O titulo nao pode ser vazio.");
 
         documents[_receiverAddress][_docName] = Document({
             docName: _docName,
+            description: _description,
             ipfsAddress: _ipfsAddress,
             creationDate: block.timestamp,
             docType: _docType,
             emitida: true
         });
 
-        // Adiciona o título à lista de badges do usuário
+        // Adiciona o título à lista de documentos do paciente
         documentNames[_receiverAddress].push(_docName);
 
-        emit RegisteredDocument(_receiverAddress, _docName, _docType);
+        emit RegisteredDocument(_receiverAddress, _docName, _description, _ipfsAddress, _docType);
     }
 
     /**
-     * @dev Retorna os detalhes de uma badge específica de um usuário.
-     * @param _receiverAddress O endereço do proprietário da badge.
-     * @param _docName O título da badge a ser consultada.
-     * @return A struct com as informações da badge.
+     * @dev Retorna os detalhes de um documento específico de um paciente.
+     * @param _receiverAddress O endereço do paciente.
+     * @param _docName O título do documento a ser consultado.
+     * @return A struct com as informações do documento.
      */
-    function getBadgePorTitulo(address _receiverAddress, string memory _docName) public view returns (Document memory) {
-        require(documents[_receiverAddress][_docName].emitida, "Badge nao encontrada para este usuario e titulo.");
+    function getDocumentByTitle(address _receiverAddress, string memory _docName) public view returns (Document memory) {
+        require(documents[_receiverAddress][_docName].emitida, "Documento nao encontrado para este paciente e titulo.");
         return documents[_receiverAddress][_docName];
     }
 
     /**
-     * @dev Retorna a lista de títulos de todas as badges que um usuário possui.
-     * @param _receiverAddress O endereço do usuário.
-     * @return Um array de strings com os títulos das badges.
+     * @dev Retorna a lista de títulos de todos os documentos que um paciente possui.
+     * @param _receiverAddress O endereço do paciente.
+     * @return Um array de strings com os títulos dos documentos.
      */
-    function getTitulosDasBadgesDoUsuario(address _receiverAddress) public view returns (string[] memory) {
+    function getAllDocumentTitles(address _receiverAddress) public view returns (string[] memory) {
         return documentNames[_receiverAddress];
     }
 
     /**
-     * @dev Retorna a quantidade de badges que um usuário possui.
-     * @param _receiverAddress O endereço do usuário.
-     * @return O número de badges.
+     * @dev Retorna a quantidade de documentos que um paciente possui.
+     * @param _receiverAddress O endereço do paciente.
+     * @return O número de documentos.
      */
-    function getContagemDeBadges(address _receiverAddress) public view returns (uint256) {
+    function getDocumentCount(address _receiverAddress) public view returns (uint256) {
         return documentNames[_receiverAddress].length;
     }
 }
