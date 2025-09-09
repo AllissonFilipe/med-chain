@@ -48,6 +48,11 @@ export class App implements OnInit {
     receiverAddress: ['', [Validators.required]],
   });
 
+  // Formulário dpara download do arquivo
+  protected readonly downloadForm = this.fb.group({
+    cid: ['', [Validators.required]],
+  });
+
   protected readonly docForm = this.fb.group({
     docName: ['', [Validators.required]],
     docType: ['', [Validators.required]],
@@ -134,5 +139,25 @@ export class App implements OnInit {
       this._snackBar.open('Erro ao registrar documento na blockchain.', 'Fechar');
     });
 
+  }
+
+  public async retrieveFilePinata() {
+    this.isLoading.set(true);
+    try {
+      const blob = await this.blockchainService.retrieveFilePinata(this.downloadForm.value.cid!);
+      const url = URL.createObjectURL(blob?.data);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'arquivo_' + this.downloadForm.value.cid + '.pdf'; // ajuste o nome se quiser
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      this._snackBar.open('Download iniciado!', 'Fechar');
+    } catch (error) {
+      this._snackBar.open('Erro ao baixar arquivo.', 'Fechar');
+    } finally {
+      this.isLoading.set(false);
+    }
   }
 }

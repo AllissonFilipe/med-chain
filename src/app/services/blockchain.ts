@@ -66,6 +66,15 @@ export class BlockchainService {
     }
   }
 
+  async retrieveFilePinata(cid:string): Promise<any> {
+    try {
+      const data = await pinata.gateways.public.get(cid);
+      return data
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async sendToken(receiverAddress: string, docName: string, description: string, ipfsAddress: string, docType: number): Promise<void> {
     await this.contract.methods.registerDocument(receiverAddress, docName, description, ipfsAddress, docType).send({ from: this.accounts[0] });
   }

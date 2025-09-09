@@ -2,7 +2,7 @@
 <div class="app-container" class="div-mat-card ">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Gestão de Health Access Token (HAT)</mat-card-title>
+      <mat-card-title>Compartilhamento de documentos</mat-card-title>
       <mat-card-subtitle>
         Compartilhe documentos médicos de forma segura e auditável
       </mat-card-subtitle>
@@ -130,10 +130,29 @@
       </mat-horizontal-stepper>
     </mat-card-content>
     <mat-card-footer class="card-footer">
-      Nenhum dado sensível é armazenado na blockchain. Apenas logs e permissões.
+      MedChain
     </mat-card-footer>
   </mat-card>
 </div>
 <div class="loading-overlay" *ngIf="isLoading()">
   <mat-spinner diameter="60"></mat-spinner>
 </div>
+
+<!-- Seção de download por CID -->
+<section class="download-section">
+  <mat-card>
+    <mat-card-content>
+      <div class="download-form">
+        <form [formGroup]="downloadForm" class="mt-mat-step">
+          <mat-form-field appearance="outline" class="cid-field">
+            <mat-label>CID do Arquivo</mat-label>
+            <input formControlName="cid" matInput placeholder="Digite o CID do arquivo">
+          </mat-form-field>
+          <button mat-button [disabled]="!downloadForm.valid" (click)="retrieveFilePinata()">
+            Baixar arquivo
+          </button>
+        </form>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</section>

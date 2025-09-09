@@ -1,3 +1,22 @@
+// Seção de download centralizada
+.download-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.download-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.cid-field {
+    min-width: 320px;
+}
 .logo-img {
     display: block;
     margin: 32px auto 16px auto;
@@ -32,7 +51,7 @@
 }
 
 .card-footer {
-    text-align: right; 
+    text-align: center; 
     font-size: 12px;
 }
 
