@@ -1,8 +1,140 @@
-export const ABI_CONTRACT =[
+export const ABI_CONTRACT = [
 	{
-		"inputs": [],
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name_",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "symbol_",
+				"type": "string"
+			}
+		],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "ERC721IncorrectOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ERC721InsufficientApproval",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "approver",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidApprover",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidOperator",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidOwner",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "receiver",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidReceiver",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "sender",
+				"type": "address"
+			}
+		],
+		"name": "ERC721InvalidSender",
+		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ERC721NonexistentToken",
+		"type": "error"
 	},
 	{
 		"anonymous": false,
@@ -10,8 +142,58 @@ export const ABI_CONTRACT =[
 			{
 				"indexed": true,
 				"internalType": "address",
-				"name": "receiverAddress",
+				"name": "owner",
 				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "approved",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "bool",
+				"name": "approved",
+				"type": "bool"
+			}
+		],
+		"name": "ApprovalForAll",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
 			},
 			{
 				"indexed": false,
@@ -21,41 +203,27 @@ export const ABI_CONTRACT =[
 			},
 			{
 				"indexed": false,
-				"internalType": "string",
-				"name": "description",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "docType",
+				"type": "uint256"
 			},
 			{
 				"indexed": false,
 				"internalType": "string",
 				"name": "ipfsAddress",
 				"type": "string"
-			},
-			{
-				"indexed": true,
-				"internalType": "enum MedicalDocumentRepository.DocumentType",
-				"name": "docType",
-				"type": "uint8"
 			}
 		],
-		"name": "RegisteredDocument",
+		"name": "DocumentCreated",
 		"type": "event"
 	},
 	{
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "",
+				"name": "to",
 				"type": "address"
 			},
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"name": "documents",
-		"outputs": [
 			{
 				"internalType": "string",
 				"name": "docName",
@@ -73,56 +241,185 @@ export const ABI_CONTRACT =[
 			},
 			{
 				"internalType": "uint256",
-				"name": "creationDate",
+				"name": "docType",
+				"type": "uint256"
+			}
+		],
+		"name": "mint",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
 				"type": "uint256"
 			},
 			{
-				"internalType": "enum MedicalDocumentRepository.DocumentType",
-				"name": "docType",
-				"type": "uint8"
+				"internalType": "bytes",
+				"name": "data",
+				"type": "bytes"
+			}
+		],
+		"name": "safeTransferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
 			},
 			{
 				"internalType": "bool",
-				"name": "emitida",
+				"name": "approved",
 				"type": "bool"
 			}
 		],
-		"stateMutability": "view",
+		"name": "setApprovalForAll",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
+		"anonymous": false,
 		"inputs": [
 			{
+				"indexed": true,
 				"internalType": "address",
-				"name": "_receiverAddress",
-				"type": "address"
-			}
-		],
-		"name": "getAllDocumentTitles",
-		"outputs": [
-			{
-				"internalType": "string[]",
-				"name": "",
-				"type": "string[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_receiverAddress",
+				"name": "from",
 				"type": "address"
 			},
 			{
-				"internalType": "string",
-				"name": "_docName",
-				"type": "string"
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
 			}
 		],
-		"name": "getDocumentByTitle",
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "getApproved",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "getDocument",
 		"outputs": [
 			{
 				"components": [
@@ -143,21 +440,11 @@ export const ABI_CONTRACT =[
 					},
 					{
 						"internalType": "uint256",
-						"name": "creationDate",
-						"type": "uint256"
-					},
-					{
-						"internalType": "enum MedicalDocumentRepository.DocumentType",
 						"name": "docType",
-						"type": "uint8"
-					},
-					{
-						"internalType": "bool",
-						"name": "emitida",
-						"type": "bool"
+						"type": "uint256"
 					}
 				],
-				"internalType": "struct MedicalDocumentRepository.Document",
+				"internalType": "struct DocumentNFT.Document",
 				"name": "",
 				"type": "tuple"
 			}
@@ -166,14 +453,8 @@ export const ABI_CONTRACT =[
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_receiverAddress",
-				"type": "address"
-			}
-		],
-		"name": "getDocumentCount",
+		"inputs": [],
+		"name": "getNextTokenId",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -185,8 +466,51 @@ export const ABI_CONTRACT =[
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "operator",
+				"type": "address"
+			}
+		],
+		"name": "isApprovedForAll",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
-		"name": "owner",
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "ownerOf",
 		"outputs": [
 			{
 				"internalType": "address",
@@ -200,34 +524,52 @@ export const ABI_CONTRACT =[
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "_receiverAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "string",
-				"name": "_docName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_description",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_ipfsAddress",
-				"type": "string"
-			},
-			{
-				"internalType": "enum MedicalDocumentRepository.DocumentType",
-				"name": "_docType",
-				"type": "uint8"
+				"internalType": "bytes4",
+				"name": "interfaceId",
+				"type": "bytes4"
 			}
 		],
-		"name": "registerDocument",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "supportsInterface",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenURI",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	}
 ]

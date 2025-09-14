@@ -98,15 +98,6 @@ export class App implements OnInit {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file((file: File) => {
           this.selectedFile = file;
-
-          // Gerar preview
-          if (file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = () => this.filePreview.set(reader.result as string);
-            reader.readAsDataURL(file);
-          } else {
-            this.filePreview.set(null);
-          }
         });
       }
     }
@@ -157,6 +148,7 @@ export class App implements OnInit {
     } catch (error) {
       this._snackBar.open('Erro ao baixar arquivo.', 'Fechar');
     } finally {
+      this.downloadForm.get('cid')?.reset();
       this.isLoading.set(false);
     }
   }

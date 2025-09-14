@@ -36,8 +36,9 @@
             </ng-template>
           </ngx-file-drop>
 
-          <div *ngIf="filePreview()" class="preview mt-ngx-file">
-            <img [src]="filePreview()" alt="Pré-visualização" />
+          <div *ngIf="selectedFile" class="file-info mt-ngx-file">
+            <mat-icon>insert_drive_file</mat-icon>
+            <span>{{ selectedFile.name }}</span>
           </div>
           <form [formGroup]="docForm" class="mt-mat-step">
             <mat-form-field appearance="outline" class="w-100">
@@ -145,11 +146,11 @@
       <div class="download-form">
         <form [formGroup]="downloadForm" class="mt-mat-step">
           <mat-form-field appearance="outline" class="cid-field">
-            <mat-label>CID do Arquivo</mat-label>
-            <input formControlName="cid" matInput placeholder="Digite o CID do arquivo">
+            <mat-label>Código identificador do documento</mat-label>
+            <input formControlName="cid" matInput placeholder="Digite o Código">
           </mat-form-field>
           <button mat-button [disabled]="!downloadForm.valid" (click)="retrieveFilePinata()">
-            Baixar arquivo
+            Baixar
           </button>
         </form>
       </div>
