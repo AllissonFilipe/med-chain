@@ -76,6 +76,6 @@ export class BlockchainService {
   }
 
   async sendToken(receiverAddress: string, docName: string, description: string, ipfsAddress: string, docType: number): Promise<void> {
-    await this.contract.methods.mint(receiverAddress, docName, description, ipfsAddress, docType).send({ from: this.accounts[0] });
+    await this.contract.methods.registerDocument(receiverAddress, docName, description, ipfsAddress, docType).send({ from: this.accounts[0] });
   }
 }

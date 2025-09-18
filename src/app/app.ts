@@ -144,7 +144,7 @@ export class App implements OnInit {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      this._snackBar.open('Download iniciado!', 'Fechar');
+      this._snackBar.open('Download realizado!', 'Fechar');
     } catch (error) {
       this._snackBar.open('Erro ao baixar arquivo.', 'Fechar');
     } finally {
