@@ -2,11 +2,11 @@
 pragma solidity ^0.8.30;
 
 /**
- * @title MedicalDocumentRepository
+ * @title HatRepository
  * @dev Contrato para que usuários possam receber múltiplos documentos médicos.
  * Apenas o proprietário do contrato pode emitir novos documentos.
  */
-contract MedicalDocumentRepository {
+contract HatRepository {
 
     address public owner;
 
